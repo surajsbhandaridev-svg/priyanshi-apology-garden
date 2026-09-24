@@ -1,0 +1,10 @@
+This folder should contain two files you add yourself (see the main README.md for details):
+
+  sorry.mp3   — a legally obtained copy of "Sorry" by Justin Bieber
+  sorry.lrc   — a timestamped lyrics file for the same song, in standard LRC format
+
+Once both are here, delete this text file (or leave it — index.html ignores anything
+that isn't named exactly "sorry.mp3" or "sorry.lrc").
+
+Git doesn't track empty folders, which is why this placeholder file exists — it keeps
+the assets/ folder present when you upload the project to GitHub.

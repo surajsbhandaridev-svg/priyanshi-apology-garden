@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Thousand Flowers of Sorry — For Priyanshi 💜</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --color-lavender-light: #E6DFFA;
+            --color-lavender-main: #9B7EDB;
+            --color-lavender-deep: #5A3E99;
+            --color-rose-light: #FFDFE7;
+            --color-rose-main: #E86B8B;
+            --color-gold-glow: #FCD34D;
+            --color-twilight-bg: #0D0714;
+            --color-glass: rgba(22, 12, 38, 0.65);
+            --color-glass-border: rgba(186, 156, 255, 0.25);
+            --color-text-main: #F3EEFF;
+            --color-text-muted: #BBA8E0;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            --font-handwriting: 'Alex Brush', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--color-twilight-bg);
+            color: var(--color-text-main);
+            font-family: var(--font-sans);
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(13, 7, 20, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(155, 126, 219, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(155, 126, 219, 0.7);
+        }
+
+        /* Ambient Canvas Layers */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #garden-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .bg-layer {
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.2s ease-out, filter 1s ease;
+            will-change: transform;
+        }
+
+        #bg-dusk {
+            background-image: url('assets/garden.png'), url('assets/garden_hd.jpg');
+            opacity: 1;
+        }
+
+        #bg-night {
+            background-image: url('assets/night_garden.jpg');
+            opacity: 0;
+        }
+
+        .vignette-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 40%, rgba(10, 5, 20, 0.6) 80%, rgba(5, 2, 10, 0.9) 100%);
+            pointer-events: none;
+        }
+
+        /* MAIN APP CONTAINER */
+        #app {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* CINEMATIC OPENING OVERLAY */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            background: radial-gradient(circle at center, rgba(20, 10, 35, 0.85) 0%, rgba(8, 4, 15, 0.98) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
+        }
+
+        #intro-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-card {
+            max-width: 650px;
+            padding: 3rem 2.5rem;
+            background: rgba(30, 15, 50, 0.4);
+            border: 1px solid rgba(186, 156, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(155, 126, 219, 0.2);
+            animation: introFadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes introFadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .intro-title {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-lavender-light);
+            text-shadow: 0 0 20px rgba(186, 156, 255, 0.5);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .intro-subtitle {
+            font-family: var(--font-handwriting);
+            font-size: 2.5rem;
+            color: var(--color-rose-light);
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .intro-text {
+            font-size: 1.15rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.1rem 2.5rem;
+            background: linear-gradient(135deg, rgba(155, 126, 219, 0.8), rgba(90, 62, 153, 0.9));
+            border: 1px solid rgba(230, 223, 250, 0.5);
+            border-radius: 50px;
+            color: #FFF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(155, 126, 219, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(155, 126, 219, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(175, 146, 239, 0.9), rgba(110, 72, 173, 0.95));
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* NAVIGATION HEADER DOCK */
+        .nav-dock {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: var(--color-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 40px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(155, 126, 219, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item {
+            padding: 10px 18px;
+            border-radius: 25px;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: #FFF;
+            background: rgba(155, 126, 219, 0.3);
+            text-shadow: 0 0 10px rgba(186, 156, 255, 0.5);
+        }
+
+        /* CHAPTER SECTIONS CONTAINER */
+        .chapter-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 6rem 2rem 8rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8rem;
+        }
+
+        .chapter-card {
+            background: var(--color-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 30px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(155, 126, 219, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .chapter-card:hover {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(155, 126, 219, 0.25);
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .chapter-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(155, 126, 219, 0.2);
+            border: 1px solid rgba(186, 156, 255, 0.3);
+            border-radius: 20px;
+            color: var(--color-rose-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-title {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            color: var(--color-lavender-light);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 15px rgba(186, 156, 255, 0.3);
+        }
+
+        .chapter-subtitle {
+            font-family: var(--font-handwriting);
+            font-size: 2.2rem;
+            color: var(--color-rose-main);
+        }
+
+        /* CHAPTER 2: INTERACTIVE FLOWER PATH */
+        .flower-nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .flower-node-card {
+            background: rgba(25, 14, 42, 0.6);
+            border: 1px solid rgba(186, 156, 255, 0.2);
+            border-radius: 20px;
+            padding: 1.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .flower-node-card:hover {
+            transform: translateY(-8px);
+            background: rgba(45, 25, 75, 0.7);
+            border-color: rgba(232, 107, 139, 0.5);
+            box-shadow: 0 15px 30px rgba(155, 126, 219, 0.3);
+        }
+
+        .flower-icon {
+            font-size: 2.5rem;
+            color: var(--color-lavender-main);
+            margin-bottom: 1rem;
+            transition: transform 0.4s ease;
+            display: inline-block;
+        }
+
+        .flower-node-card:hover .flower-icon {
+            transform: scale(1.25) rotate(8deg);
+            color: var(--color-rose-main);
+        }
+
+        .flower-node-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--color-text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .flower-node-hint {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* CHAPTER 3: APOLOGY CARD READER */
+        .apology-card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 260px;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(18, 9, 32, 0.7);
+            border: 1px solid rgba(186, 156, 255, 0.25);
+            border-radius: 24px;
+            margin: 2rem 0;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(155, 126, 219, 0.1);
+        }
+
+        .apology-counter {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 0.85rem;
+            color: var(--color-rose-light);
+            background: rgba(155, 126, 219, 0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .apology-message-text {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            line-height: 1.6;
+            color: var(--color-lavender-light);
+            margin-bottom: 1rem;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .letter-scroll-box {
+            background: rgba(25, 12, 42, 0.8);
+            border: 1px dashed rgba(232, 107, 139, 0.4);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            line-height: 2;
+            color: #F8F4FF;
+            text-align: justify;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-family: var(--font-handwriting);
+            font-size: 2.5rem;
+            color: var(--color-rose-main);
+            margin-top: 1.5rem;
+        }
+
+        /* CHAPTER 4: MUSIC & SYNCHRONIZED LYRICS */
+        .player-visualizer-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .music-player-bar {
+            background: rgba(20, 10, 35, 0.8);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 24px;
+            padding: 1.8rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .player-info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .track-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--color-lavender-light);
+        }
+
+        .track-artist {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-lavender-main), var(--color-lavender-deep));
+            border: none;
+            color: #FFF;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(155, 126, 219, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .btn-circle:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .time-display {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            min-width: 45px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--color-lavender-main), var(--color-rose-main));
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            accent-color: var(--color-lavender-main);
+            cursor: pointer;
+        }
+
+        /* LYRICS CONTAINER */
+        .lyrics-viewport {
+            height: 220px;
+            overflow-y: auto;
+            background: rgba(12, 6, 20, 0.7);
+            border: 1px solid rgba(186, 156, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        .lyric-line {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 14px 0;
+            transition: all 0.4s ease;
+            font-weight: 300;
+        }
+
+        .lyric-line.active {
+            font-size: 1.45rem;
+            color: var(--color-rose-light);
+            font-weight: 600;
+            text-shadow: 0 0 15px rgba(232, 107, 139, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* CHAPTER 5: THE QUIET GARDEN CONTROLS */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .control-box {
+            background: rgba(20, 10, 35, 0.6);
+            border: 1px solid rgba(186, 156, 255, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-label {
+            font-size: 1rem;
+            color: var(--color-lavender-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .custom-range {
+            width: 100%;
+            accent-color: var(--color-rose-main);
+            cursor: pointer;
+        }
+
+        /* CHAPTER 6: FINAL BOUQUET SCENE */
+        .final-bouquet-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 2.5rem;
+        }
+
+        .bouquet-img-card {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(232, 107, 139, 0.5);
+            box-shadow: 0 0 50px rgba(232, 107, 139, 0.4), 0 0 30px rgba(155, 126, 219, 0.4);
+            animation: bouquetPulse 4s ease-in-out infinite alternate;
+        }
+
+        .bouquet-img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes bouquetPulse {
+            from { transform: scale(1); box-shadow: 0 0 30px rgba(232, 107, 139, 0.4); }
+            to { transform: scale(1.04); box-shadow: 0 0 60px rgba(155, 126, 219, 0.7); }
+        }
+
+        .final-poetry {
+            font-family: var(--font-serif);
+            font-size: 1.45rem;
+            line-height: 2;
+            color: var(--color-lavender-light);
+            max-width: 700px;
+        }
+
+        .final-highlight {
+            font-family: var(--font-handwriting);
+            font-size: 3rem;
+            color: var(--color-rose-main);
+            display: block;
+            margin: 1.5rem 0;
+        }
+
+        /* MODAL DIALOG */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 5, 20, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(30, 15, 50, 0.9);
+            border: 1px solid rgba(232, 107, 139, 0.4);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(155, 126, 219, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--color-rose-main);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--color-lavender-light);
+            margin-bottom: 1rem;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .intro-title { font-size: 2.2rem; }
+            .intro-subtitle { font-size: 1.8rem; }
+            .chapter-card { padding: 2.5rem 1.5rem; }
+            .chapter-title { font-size: 2.2rem; }
+            .nav-dock { padding: 6px 10px; width: 92%; justify-content: space-around; }
+            .nav-item span { display: none; }
+            .bouquet-img-card { width: 220px; height: 220px; }
+            .apology-message-text { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND PARALLAX LAYERS -->
+    <div id="garden-bg-container">
+        <div id="bg-dusk" class="bg-layer"></div>
+        <div id="bg-night" class="bg-layer"></div>
+        <div class="vignette-overlay"></div>
+    </div>
+
+    <!-- CANVAS ANIMATION OVERLAY (Fireflies, Swaying Lavender & Wind Petals) -->
+    <div id="canvas-container">
+        <canvas id="gardenCanvas"></canvas>
+    </div>
+
+    <!-- CINEMATIC OPENING OVERLAY -->
+    <div id="intro-overlay">
+        <div class="intro-card">
+            <h1 class="intro-title">Hey, Priyanshi... 💜</h1>
+            <span class="intro-subtitle">A little world, made especially for you</span>
+            <p class="intro-text">
+                I remembered the flowers you love, so I built a digital garden where lavender blooms and roses sway in the quiet breeze. <br><br>
+                Some things are far easier to feel than to explain.
+            </p>
+            <button id="btn-enter" class="btn-primary">
+                <span>Enter Your Garden</span>
+                <i class="fa-solid fa-seedling"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP & STORY CHAPTERS -->
+    <div id="app">
+
+        <!-- BOTTOM NAVIGATION DOCK -->
+        <nav class="nav-dock">
+            <a href="#entrance" class="nav-item active" data-chapter="entrance">
+                <i class="fa-solid fa-door-open"></i>
+                <span>Entrance</span>
+            </a>
+            <a href="#flower-path" class="nav-item" data-chapter="flower-path">
+                <i class="fa-solid fa-route"></i>
+                <span>Path</span>
+            </a>
+            <a href="#letters" class="nav-item" data-chapter="letters">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Letters</span>
+            </a>
+            <a href="#music" class="nav-item" data-chapter="music">
+                <i class="fa-solid fa-music"></i>
+                <span>Music</span>
+            </a>
+            <a href="#quiet-garden" class="nav-item" data-chapter="quiet-garden">
+                <i class="fa-solid fa-cloud-moon"></i>
+                <span>Sanctuary</span>
+            </a>
+            <a href="#bouquet" class="nav-item" data-chapter="bouquet">
+                <i class="fa-solid fa-spa"></i>
+                <span>Bouquet</span>
+            </a>
+        </nav>
+
+        <div class="chapter-container">
+
+            <!-- CHAPTER 1: THE ENTRANCE -->
+            <section id="entrance" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter I</span>
+                    <h2 class="chapter-title">A Thousand Flowers of Sorry</h2>
+                    <span class="chapter-subtitle">Welcome to your sanctuary, Priyanshi</span>
+                </div>
+                <p style="text-align: center; color: var(--color-text-muted); font-size: 1.15rem; line-height: 1.9; max-width: 800px; margin: 0 auto;">
+                    This garden was designed around the colors and serene quiet of evening lavender fields. Walk down the stone path, listen to the gentle breeze, and explore the small secret notes left tucked among the blossoms.
+                </p>
+            </section>
+
+            <!-- CHAPTER 2: THE FLOWER PATH -->
+            <section id="flower-path" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter II</span>
+                    <h2 class="chapter-title">The Flower Path</h2>
+                    <span class="chapter-subtitle">Interactive Lavender & Rose Blossoms</span>
+                </div>
+                <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 2rem;">
+                    Click on any flower node below to release glowing petals and discover a secret message.
+                </p>
+                <div class="flower-nodes-grid">
+                    <div class="flower-node-card" onclick="openFlowerModal('Lavender Peace', 'Lavender stands for calm, grace, and inner peace. I hope your heart feels light today and every day ahead.')">
+                        <i class="fa-solid fa-spa flower-icon"></i>
+                        <h3 class="flower-node-title">Lavender Spikes</h3>
+                        <span class="flower-node-hint">Click to bloom & reveal</span>
+                    </div>
+                    <div class="flower-node-card" onclick="openFlowerModal('Pink Rose Memories', 'Roses carry the sweetness of genuine appreciation. Thank you for every warm memory you shared.')">
+                        <i class="fa-solid fa-fan flower-icon" style="color: var(--color-rose-main);"></i>
+                        <h3 class="flower-node-title">Climbing Pink Rose</h3>
+                        <span class="flower-node-hint">Click to bloom & reveal</span>
+                    </div>
+                    <div class="flower-node-card" onclick="openFlowerModal('Evening Gazebo', 'A cozy gazebo under string lights, where quiet conversations and peaceful thoughts reside.')">
+                        <i class="fa-solid fa-warehouse flower-icon" style="color: var(--color-gold-glow);"></i>
+                        <h3 class="flower-node-title">Warm Gazebo Light</h3>
+                        <span class="flower-node-hint">Click to bloom & reveal</span>
+                    </div>
+                    <div class="flower-node-card" onclick="openFlowerModal('Stone Pathway', 'Every stone along this path represents patience, reflection, and a step toward understanding.')">
+                        <i class="fa-solid fa-shoe-prints flower-icon"></i>
+                        <h3 class="flower-node-title">Flagstone Path</h3>
+                        <span class="flower-node-hint">Click to bloom & reveal</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 3: THE HEARTFELT MESSAGES -->
+            <section id="letters" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter III</span>
+                    <h2 class="chapter-title">Little Things I Wanted You to Know</h2>
+                    <span class="chapter-subtitle">Priyanshi 💌</span>
+                </div>
+
+                <div class="apology-card-wrapper">
+                    <span id="apology-counter" class="apology-counter">Message 1 of 50</span>
+                    <p id="apology-text" class="apology-message-text">
+                        "Priyanshi, I truly value your presence in my life more than I ever expressed properly."
+                    </p>
+                    <button id="btn-next-message" class="btn-primary" style="margin-top: 1.5rem; padding: 0.8rem 2rem; font-size: 1rem;">
+                        <span>A Little More From My Heart</span>
+                        <i class="fa-solid fa-heart" style="color: var(--color-rose-light);"></i>
+                    </button>
+                </div>
+
+                <div class="letter-scroll-box">
+                    <h3 style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--color-rose-light); margin-bottom: 1.5rem; text-align: center;">
+                        A Letter I Wanted to Write to You
+                    </h3>
+                    <p>
+                        Dear Priyanshi,<br><br>
+                        Creating this garden was my quiet way of stepping back and reflecting deeply. I know that words alone can sometimes feel insufficient, but I wanted to build something tangible, peaceful, and respectful—a little world where you can pause whenever you need to.<br><br>
+                        I am genuinely sorry for the times I failed to listen with enough patience, or when my actions brought unnecessary stress into your life. You have always carried yourself with grace, kindness, and sincerity, and you deserved nothing less in return.<br><br>
+                        There is no pressure behind this garden—no expectation of any response or forgiveness. My only wish is that when you look at these swaying lavender stems and pink roses, you feel appreciated, respected, and surrounded by peace.
+                    </p>
+                    <div class="letter-signature">
+                        With deep respect & sincerity 💜
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 4: MUSIC & SYNCHRONIZED LYRICS -->
+            <section id="music" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter IV</span>
+                    <h2 class="chapter-title">The Garden Melody</h2>
+                    <span class="chapter-subtitle">Justin Bieber — Sorry 🎵</span>
+                </div>
+
+                <div class="player-visualizer-box">
+                    <div class="music-player-bar">
+                        <div class="player-info-row">
+                            <div>
+                                <h4 class="track-title">Sorry</h4>
+                                <span class="track-artist">Justin Bieber</span>
+                            </div>
+                            <div class="volume-control">
+                                <i class="fa-solid fa-volume-high" style="color: var(--color-text-muted);"></i>
+                                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
+                            </div>
+                        </div>
+
+                        <div class="progress-wrapper">
+                            <span id="time-current" class="time-display">0:00</span>
+                            <div id="progress-bar-bg" class="progress-bar-bg">
+                                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                            </div>
+                            <span id="time-duration" class="time-display">0:00</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; margin-top: 0.5rem;">
+                            <button id="btn-play-pause" class="btn-circle">
+                                <i id="play-icon" class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- LYRICS BOX -->
+                    <div id="lyrics-viewport" class="lyrics-viewport">
+                        <div id="lyrics-container">
+                            <p class="lyric-line">Loading synchronized lyrics...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 5: THE QUIET GARDEN SANCTUARY -->
+            <section id="quiet-garden" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter V</span>
+                    <h2 class="chapter-title">The Quiet Sanctuary</h2>
+                    <span class="chapter-subtitle">Adjust your environment</span>
+                </div>
+                <div class="controls-grid">
+                    <div class="control-box">
+                        <div class="control-label">
+                            <i class="fa-solid fa-wind" style="color: var(--color-lavender-main);"></i>
+                            <span>Breeze Speed</span>
+                        </div>
+                        <input type="range" id="slider-wind" class="custom-range" min="0.5" max="3" step="0.1" value="1">
+                    </div>
+                    <div class="control-box">
+                        <div class="control-label">
+                            <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--color-gold-glow);"></i>
+                            <span>Firefly Density</span>
+                        </div>
+                        <input type="range" id="slider-fireflies" class="custom-range" min="10" max="80" step="5" value="40">
+                    </div>
+                    <div class="control-box">
+                        <div class="control-label">
+                            <i class="fa-solid fa-moon" style="color: var(--color-rose-light);"></i>
+                            <span>Atmosphere Mode</span>
+                        </div>
+                        <button id="btn-toggle-night" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                            <span>Toggle Moonlit Night</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 6: THE FINAL BOUQUET -->
+            <section id="bouquet" class="chapter-card">
+                <div class="chapter-header">
+                    <span class="chapter-badge">Chapter VI</span>
+                    <h2 class="chapter-title">The Final Bouquet</h2>
+                    <span class="chapter-subtitle">A lasting wish for Priyanshi</span>
+                </div>
+
+                <div class="final-bouquet-wrapper">
+                    <div class="bouquet-img-card">
+                        <img src="assets/bouquet.jpg" alt="Lavender and Rose Bouquet">
+                    </div>
+
+                    <div class="final-poetry">
+                        "Some flowers say what words cannot.<br><br>
+                        Lavender for the peace I wish for you.<br>
+                        Roses for the beautiful memories I appreciate.<br>
+                        And this little garden... for something I wanted to say from the heart."
+                        <span class="final-highlight">Priyanshi, I'm sorry. 💜</span>
+                        I hope life brings you beautiful days, peaceful moments, and countless reasons to smile.
+                    </div>
+
+                    <button id="btn-final-flower" class="btn-primary" style="padding: 1.2rem 3rem; font-size: 1.15rem;">
+                        <span>One Last Little Flower</span>
+                        <i class="fa-solid fa-spa" style="color: var(--color-rose-light);"></i>
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- FLOWER MODAL DIALOG -->
+    <div id="flowerModal" class="modal-overlay">
+        <div class="modal-content">
+            <i id="modalIcon" class="fa-solid fa-spa modal-icon"></i>
+            <h3 id="modalTitle" class="modal-title">Flower Note</h3>
+            <p id="modalBody" class="modal-body">Message content goes here.</p>
+            <button class="btn-primary" onclick="closeFlowerModal()" style="padding: 0.8rem 2rem;">
+                <span>Close Note</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- AUDIO ELEMENT -->
+    <audio id="audio-player" src="assets/sorry.mp3" preload="auto"></audio>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // 50 HEARTFELT MESSAGES FOR PRIYANSHI
+        const apologyMessages = [
+            "Priyanshi, I truly value your presence in my life more than I ever expressed properly.",
+            "I'm genuinely sorry for the moments where I fell short of being the supportive friend you deserved.",
+            "Your peace of mind matters to me immensely, and I never wanted to be a cause of stress for you.",
+            "I hope you know that my intentions were never to hurt you, though I acknowledge that my actions misaligned.",
+            "Lavender represents peace and devotion—and that is exactly what I wish for your heart today.",
+            "I respect your space and feelings completely. This little garden is just a quiet token of my sincere apology.",
+            "Thank you for every smile, every conversation, and every kind memory you've ever shared with me.",
+            "You have a beautiful, thoughtful soul, Priyanshi, and you deserve nothing but kindness.",
+            "I spent time making this world for you because words on a screen felt too small for how sorry I am.",
+            "If I could turn back time, I would listen more attentively and act with far greater care.",
+            "I don't expect anything in return; I just wanted to leave you with something gentle and beautiful.",
+            "Roses carry the warmth of appreciation, and I genuinely appreciate every good moment we shared.",
+            "I hope this garden brings a quiet moment of calm to your evening whenever you visit.",
+            "Apologizing isn't just about saying words; it's about holding myself accountable and growing.",
+            "Your happiness and peace will always be something I root for from afar.",
+            "I am sorry for the misunderstandings and for not communicating as maturely as I should have.",
+            "Every flower here sways in the wind to remind you how much care went into creating this space.",
+            "You deserve people in your life who handle your heart with patience and deep respect.",
+            "I'm learning to be better, and I'm truly sorry for the times I wasn't.",
+            "Priyanshi, your kindness left an impression that I will always hold with gratitude.",
+            "I hope life gives you endless reasons to laugh, dream, and feel genuinely cherished.",
+            "This place is yours whenever you need a peaceful digital escape.",
+            "I am sorry for any frustration or disappointment I caused. You deserved better.",
+            "May your days be as bright and fragrant as a blooming field of lavender.",
+            "No distance or silence changes the genuine respect I hold for you.",
+            "I take full responsibility for my mistakes without any excuses.",
+            "I built this garden leaf by leaf, code by code, hoping it brings a soft smile to your face.",
+            "You bring a unique warmth into the lives of those around you.",
+            "I'm sorry for failing to recognize what was important to you in the moment.",
+            "I hope the breeze in this garden whispers peace to your mind whenever things feel heavy.",
+            "You are worthy of genuine understanding, quiet patience, and unwavering sincerity.",
+            "I regret every single time I caused you even a moment of doubt or discomfort.",
+            "Thank you for teaching me, even implicitly, how to be more thoughtful.",
+            "Even if paths drift, I will always wish you the absolute best in everything you do.",
+            "The lavender flowers here stand tall and calm, just like the quiet grace you carry.",
+            "I hope this space feels like a gentle hug for your spirit.",
+            "I am sorry for any harshness or impatience—you deserved only gentleness.",
+            "Every line of music and code here was curated to honor your favorite things.",
+            "May your journey ahead be filled with blooming opportunities and peaceful hearts.",
+            "I am deeply sorry for missing the mark when it mattered most.",
+            "You have a rare light in you, Priyanshi. Don't ever let anything dim it.",
+            "I hope this apology feels authentic, quiet, and free of any pressure.",
+            "Roses remind me of grace under pressure—a quality I've always admired in you.",
+            "I'm sorry for the silence when words were needed, and for words when silence was better.",
+            "If this garden brings you even five seconds of happiness, then every effort was worth it.",
+            "I wish you strength for your challenges and soft quiet comfort for your resting hours.",
+            "I hold no expectations—only a sincere hope that you are doing wonderfully well.",
+            "Priyanshi, thank you for being someone worth taking the time to apologize to deeply.",
+            "May your life be surrounded by genuine love, gentle understanding, and beauty.",
+            "From the bottom of my heart, Priyanshi: I am truly, deeply sorry. 💜"
+        ];
+
+        let currentMessageIndex = 0;
+
+        // PARALLAX MOUSE TRACKING
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 30;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+
+        function updateParallax() {
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+            const bgDusk = document.getElementById('bg-dusk');
+            const bgNight = document.getElementById('bg-night');
+            const transformStr = `translate3d(${mouseX}px, ${mouseY}px, 0) scale(1.05)`;
+            if (bgDusk) bgDusk.style.transform = transformStr;
+            if (bgNight) bgNight.style.transform = transformStr;
+            requestAnimationFrame(updateParallax);
+        }
+        updateParallax();
+
+        // CANVAS ANIMATION (FIREFLIES & WIND SWAY)
+        const canvas = document.getElementById('gardenCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Firefly Particles
+        let fireflyCount = 40;
+        let fireflies = [];
+
+        function initFireflies() {
+            fireflies = [];
+            for (let i = 0; i < fireflyCount; i++) {
+                fireflies.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2.5 + 1,
+                    alpha: Math.random(),
+                    speedAlpha: Math.random() * 0.02 + 0.005,
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    color: Math.random() > 0.3 ? '#FCD34D' : '#E6DFFA'
+                });
+            }
+        }
+        initFireflies();
+
+        let windSpeedFactor = 1;
+        let time = 0;
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+            time += 0.015 * windSpeedFactor;
+
+            // Draw Fireflies
+            for (let f of fireflies) {
+                f.x += f.vx * windSpeedFactor;
+                f.y += f.vy;
+                f.alpha += f.speedAlpha;
+
+                if (f.alpha > 1 || f.alpha < 0.2) f.speedAlpha = -f.speedAlpha;
+                if (f.x < 0) f.x = width;
+                if (f.x > width) f.x = 0;
+                if (f.y < 0) f.y = height;
+                if (f.y > height) f.y = 0;
+
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, f.alpha);
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+                ctx.fillStyle = f.color;
+                ctx.shadowColor = f.color;
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        // CONTROL SLIDERS
+        const sliderWind = document.getElementById('slider-wind');
+        if (sliderWind) {
+            sliderWind.addEventListener('input', (e) => {
+                windSpeedFactor = parseFloat(e.target.value);
+            });
+        }
+
+        const sliderFireflies = document.getElementById('slider-fireflies');
+        if (sliderFireflies) {
+            sliderFireflies.addEventListener('input', (e) => {
+                fireflyCount = parseInt(e.target.value);
+                initFireflies();
+            });
+        }
+
+        // ATMOSPHERE MODE TOGGLE
+        const btnToggleNight = document.getElementById('btn-toggle-night');
+        let isNight = false;
+        if (btnToggleNight) {
+            btnToggleNight.addEventListener('click', () => {
+                isNight = !isNight;
+                document.getElementById('bg-dusk').style.opacity = isNight ? '0' : '1';
+                document.getElementById('bg-night').style.opacity = isNight ? '1' : '0';
+                btnToggleNight.querySelector('span').textContent = isNight ? 'Toggle Dusk Golden' : 'Toggle Moonlit Night';
+            });
+        }
+
+        // APOLOGY MESSAGE READER
+        const btnNextMessage = document.getElementById('btn-next-message');
+        const apologyText = document.getElementById('apology-text');
+        const apologyCounter = document.getElementById('apology-counter');
+
+        if (btnNextMessage) {
+            btnNextMessage.addEventListener('click', () => {
+                apologyText.style.opacity = '0';
+                apologyText.style.transform = 'translateY(10px)';
+
+                setTimeout(() => {
+                    currentMessageIndex = (currentMessageIndex + 1) % apologyMessages.length;
+                    apologyText.textContent = `"${apologyMessages[currentMessageIndex]}"`;
+                    apologyCounter.textContent = `Message ${currentMessageIndex + 1} of 50`;
+                    apologyText.style.opacity = '1';
+                    apologyText.style.transform = 'translateY(0)';
+                }, 400);
+            });
+        }
+
+        // AUDIO PLAYER & LRC LYRICS SYNCHRONIZATION
+        const audio = document.getElementById('audio-player');
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressBarBg = document.getElementById('progress-bar-bg');
+        const timeCurrent = document.getElementById('time-current');
+        const timeDuration = document.getElementById('time-duration');
+        const volumeSlider = document.getElementById('volume-slider');
+        const lyricsContainer = document.getElementById('lyrics-container');
+        const lyricsViewport = document.getElementById('lyrics-viewport');
+
+        let lyricsData = [];
+
+        // Parse LRC File
+        function parseLRC(lrcText) {
+            const lines = lrcText.split('\n');
+            const result = [];
+            const timeReg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+
+            for (let line of lines) {
+                const match = timeReg.exec(line);
+                if (match) {
+                    const min = parseInt(match[1]);
+                    const sec = parseInt(match[2]);
+                    const ms = parseFloat('0.' + match[3]);
+                    const totalTime = min * 60 + sec + ms;
+                    const text = line.replace(timeReg, '').trim();
+                    if (text) {
+                        result.push({ time: totalTime, text });
+                    }
+                }
+            }
+            return result.sort((a, b) => a.time - b.time);
+        }
+
+        // Load LRC File
+        fetch('assets/sorry.lrc')
+            .then(res => res.text())
+            .then(data => {
+                lyricsData = parseLRC(data);
+                renderLyrics();
+            })
+            .catch(err => {
+                console.log('LRC fetch notice:', err);
+            });
+
+        function renderLyrics() {
+            if (!lyricsData.length) return;
+            lyricsContainer.innerHTML = '';
+            lyricsData.forEach((item, index) => {
+                const p = document.createElement('p');
+                p.className = 'lyric-line';
+                p.id = `lyric-line-${index}`;
+                p.textContent = item.text;
+                lyricsContainer.appendChild(p);
+            });
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        if (audio) {
+            audio.volume = 0.5;
+
+            audio.addEventListener('loadedmetadata', () => {
+                timeDuration.textContent = formatTime(audio.duration);
+            });
+
+            audio.addEventListener('timeupdate', () => {
+                const cur = audio.currentTime;
+                const dur = audio.duration || 1;
+                timeCurrent.textContent = formatTime(cur);
+                progressBarFill.style.width = `${(cur / dur) * 100}%`;
+
+                // Sync Lyrics
+                if (lyricsData.length) {
+                    let activeIndex = -1;
+                    for (let i = 0; i < lyricsData.length; i++) {
+                        if (cur >= lyricsData[i].time) {
+                            activeIndex = i;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (activeIndex !== -1) {
+                        document.querySelectorAll('.lyric-line').forEach((el, idx) => {
+                            if (idx === activeIndex) {
+                                if (!el.classList.contains('active')) {
+                                    el.classList.add('active');
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            } else {
+                                el.classList.remove('active');
+                            }
+                        });
+                    }
+                }
+            });
+
+            btnPlayPause.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        playIcon.className = 'fa-solid fa-pause';
+                    }).catch(err => {
+                        console.log('Audio playback error:', err);
+                    });
+                } else {
+                    audio.pause();
+                    playIcon.className = 'fa-solid fa-play';
+                }
+            });
+
+            progressBarBg.addEventListener('click', (e) => {
+                const rect = progressBarBg.getBoundingClientRect();
+                const clickPos = (e.clientX - rect.left) / rect.width;
+                if (audio.duration) {
+                    audio.currentTime = clickPos * audio.duration;
+                }
+            });
+
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = parseFloat(e.target.value);
+            });
+        }
+
+        // CINEMATIC ENTER BUTTON
+        const btnEnter = document.getElementById('btn-enter');
+        const introOverlay = document.getElementById('intro-overlay');
+
+        if (btnEnter) {
+            btnEnter.addEventListener('click', () => {
+                introOverlay.classList.add('hidden');
+                // Attempt Audio Play
+                if (audio) {
+                    audio.play().then(() => {
+                        playIcon.className = 'fa-solid fa-pause';
+                    }).catch(() => {});
+                }
+            });
+        }
+
+        // MODAL DIALOG CONTROLS
+        function openFlowerModal(title, text) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = text;
+            document.getElementById('flowerModal').classList.add('active');
+        }
+
+        function closeFlowerModal() {
+            document.getElementById('flowerModal').classList.remove('active');
+        }
+
+        // FINAL FLOWER BUTTON CELEBRATION
+        const btnFinalFlower = document.getElementById('btn-final-flower');
+        if (btnFinalFlower) {
+            btnFinalFlower.addEventListener('click', () => {
+                openFlowerModal('One Last Little Flower 🌷', 'Priyanshi, thank you for stepping into this little world. May your days ahead be peaceful, gentle, and filled with blooming happiness. I am truly sorry. 💜');
+                // Increase firefly burst
+                fireflyCount = 80;
+                initFireflies();
+            });
+        }
+
+        // NAVIGATION DOCK ACTIVE STATE ON SCROLL
+        const sections = document.querySelectorAll('.chapter-card');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-chapter') === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
