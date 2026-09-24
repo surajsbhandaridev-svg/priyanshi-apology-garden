@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>A Thousand Flowers of Sorry — For Priyanshi 💜</title>
 
     <!-- Google Fonts -->
@@ -1009,6 +1009,198 @@
                 height: 130px;
             }
         }
+    
+/* ===== EXTRA RESPONSIVE HARDENING ===== */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    min-width: 0;
+    overflow-x: clip;
+}
+
+img, video, canvas, svg {
+    max-width: 100%;
+}
+
+button, a, input, .flower-node-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+button, .btn-primary, .btn-circle, .nav-item, .flower-node-card {
+    min-height: 44px;
+}
+
+.chapter-card,
+.intro-card,
+.modal-content,
+.music-player-bar,
+.letter-scroll-box,
+.apology-card-wrapper,
+.control-box {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.chapter-title,
+.chapter-subtitle,
+.intro-title,
+.intro-subtitle,
+.final-highlight {
+    text-wrap: balance;
+}
+
+.player-info-row,
+.progress-wrapper,
+.volume-control {
+    min-width: 0;
+}
+
+.track-title,
+.track-artist,
+.time-display {
+    overflow-wrap: anywhere;
+}
+
+.progress-bar-bg {
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .chapter-container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: clamp(0.75rem, 3vw, 1.25rem);
+        padding-right: clamp(0.75rem, 3vw, 1.25rem);
+    }
+
+    .chapter-card {
+        width: 100%;
+        padding: clamp(1.25rem, 4vw, 2rem);
+    }
+
+    .chapter-title {
+        line-height: 1.15;
+    }
+
+    .flower-node-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .apology-counter {
+        position: static;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .apology-message-text {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .letter-scroll-box {
+        text-align: left;
+        hyphens: auto;
+    }
+
+    .music-player-bar {
+        width: 100%;
+    }
+
+    .player-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .progress-wrapper {
+        gap: 7px;
+    }
+
+    .time-display {
+        min-width: 38px;
+        font-size: 0.75rem;
+    }
+
+    .lyrics-viewport {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .nav-dock {
+        left: 50%;
+        max-width: calc(100vw - 16px);
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .nav-dock::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-item {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .modal-overlay {
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .modal-content {
+        max-height: calc(100dvh - 2rem);
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .chapter-container {
+        padding-bottom: 6.5rem;
+    }
+
+    .chapter-header {
+        width: 100%;
+    }
+
+    .chapter-badge {
+        letter-spacing: 1px;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .btn-primary {
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .final-bouquet-wrapper {
+        gap: 1.5rem;
+    }
+
+    .volume-control {
+        align-items: center;
+    }
+
+    .volume-slider {
+        max-width: 45vw;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
     </style>
 </head>
 <body>
